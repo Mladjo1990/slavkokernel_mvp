@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlavkoKernel™ Dashboard - Agent Performance Analytics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #ff6b6b;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --border-color: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+        
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .agent-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .metrics-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        .metric-label {
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+        
+        .change-positive {
+            color: var(--success-color);
+        }
+        
+        .change-negative {
+            color: var(--danger-color);
+        }
+        
+        .platform-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .platform-tab {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 2px solid transparent;
+        }
+        
+        .platform-tab.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .platform-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .chart-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            text-align: center;
+        }
+        
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+        }
+        
+        .full-width-section {
+            grid-column: 1 / -1;
+        }
+        
+        .evaluations-table {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .export-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .evaluations-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .evaluation-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .evaluation-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .evaluation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .eval-agent {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .agent-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .openai-agent { background: #00a67e; }
+        .gemini-calling { background: #4285f4; }
+        .grok-emotional { background: #000000; }
+        .custom-agent { background: var(--text-light); }
+        
+        .eval-score {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        
+        .score-excellent { color: var(--success-color); }
+        .score-good { color: #2ecc71; }
+        .score-average { color: var(--warning-color); }
+        .score-poor { color: var(--danger-color); }
+        
+        .eval-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-production { background: #d4edda; color: #155724; }
+        .status-testing { background: #fff3cd; color: #856404; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        
+        .eval-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .view-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+            color: var(--text-light);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-light);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+        
+        .refresh-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .metrics-overview {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .evaluation-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .eval-agent {
+                justify-content: center;
+            }
+        }
+        
+        /* Animation for data updates */
+        .metric-value.updating {
+            animation: valueUpdate 0.5s ease;
+        }
+        
+        @keyframes valueUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="dashboard-logo">
+                <div class="logo-text">🔥 SlavkoKernel™</div>
+                <div class="agent-status">
+                    <div class="status-dot"></div>
+                    AGENT ERA LIVE
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">SK</div>
+                <div>
+                    <div style="font-weight: 600;">SlavkoKernel User</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">Professional Plan</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Metrics Overview -->
+        <div class="metrics-overview">
+            <div class="metric-card">
+                <div class="metric-value" id="totalEvaluations">0</div>
+                <div class="metric-label">Ukupno Evaluacija</div>
+                <div class="metric-change change-positive">
+                    ↗ +12% ovaj mjesec
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value" id="avgSlavkoScore">0%</div>
+                <div class="metric-label">Prosječni SlavkoScore™</div>
+                <div class="metric-change change-positive">
+                    ↗ +5.2% poboljšanje
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value" id="autonomyLevel">0%</div>
+                <div class="metric-label">Razina Autonomije</div>
+                <div class="metric-change change-positive">
+                    ↗ +8.1% rast
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value" id="costSavings">$0</div>
+                <div class="metric-label">Ušteđeni Troškovi</div>
+                <div class="metric-change change-positive">
+                    ↗ +$2,450 ovaj mjesec
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value" id="ethicsCompliance">0%</div>
+                <div class="metric-label">Ethics Compliance</div>
+                <div class="metric-change change-positive">
+                    ↗ 100% zadnjih 30 dana
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value" id="productionReady">0</div>
+                <div class="metric-label">Production Ready</div>
+                <div class="metric-change change-positive">
+                    ↗ 73% agenata spremno
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Selector -->
+        <div class="platform-selector">
+            <button class="platform-tab active" data-platform="all">Sve Platforme</button>
+            <button class="platform-tab" data-platform="openai">OpenAI Agent</button>
+            <button class="platform-tab" data-platform="gemini">Gemini Calling</button>
+            <button class="platform-tab" data-platform="grok">Grok Emotional</button>
+            <button class="platform-tab" data-platform="custom">Custom Agents</button>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <h3 class="chart-title">Agent Performance Radar</h3>
+                <div class="chart-canvas">
+                    <canvas id="performanceRadar"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="chart-title">Platform Distribucija</h3>
+                <div class="chart-canvas">
+                    <canvas id="platformDistribution"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container full-width-section">
+                <h3 class="chart-title">SlavkoScore™ Trend (Zadnjih 30 dana)</h3>
+                <div class="chart-canvas">
+                    <canvas id="scoreTrend"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Evaluations Table -->
+        <div class="evaluations-table">
+            <div class="table-header">
+                <h3 class="chart-title">Nedavne Agent Evaluacije</h3>
+                <button class="export-btn" onclick="exportData()">
+                    📊 Export CSV
+                </button>
+            </div>
+            
+            <div class="evaluations-list" id="evaluationsList">
+                <!-- Loading state -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    Učitavam agent evaluacije...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn" onclick="refreshData()" title="Osvježi podatke">
+        🔄
+    </button>
+
+    <script>
+        // Global variables za charts
+        let performanceChart, distributionChart, trendChart;
+        let currentPlatform = 'all';
+        
+        // Simulirani podaci (zamijeniti s API pozivima)
+        const mockData = {
+            metrics: {
+                totalEvaluations: 2847,
+                avgSlavkoScore: 84,
+                autonomyLevel: 76,
+                costSavings: 18420,
+                ethicsCompliance: 92,
+                productionReady: 156
+            },
+            evaluations: [
+                {
+                    id: 1,
+                    platform: 'openai-agent',
+                    name: 'Customer Support Workflow',
+                    score: 92,
+                    status: 'production',
+                    timestamp: '2025-07-28 14:30',
+                    autonomy: 88,
+                    efficiency: 94
+                },
+                {
+                    id: 2,
+                    platform: 'gemini-calling',
+                    name: 'Data Analysis Agent',
+                    score: 78,
+                    status: 'testing',
+                    timestamp: '2025-07-28 13:15',
+                    autonomy: 72,
+                    efficiency: 85
+                },
+                {
+                    id: 3,
+                    platform: 'grok-emotional',
+                    name: 'Therapy Assistant Bot',
+                    score: 65,
+                    status: 'testing',
+                    timestamp: '2025-07-28 12:45',
+                    autonomy: 58,
+                    efficiency: 71
+                },
+                {
+                    id: 4,
+                    platform: 'custom-agent',
+                    name: 'E-commerce Recommendation',
+                    score: 89,
+                    status: 'production',
+                    timestamp: '2025-07-28 11:20',
+                    autonomy: 85,
+                    efficiency: 92
+                },
+                {
+                    id: 5,
+                    platform: 'openai-agent',
+                    name: 'Content Generation Pipeline',
+                    score: 41,
+                    status: 'failed',
+                    timestamp: '2025-07-28 10:30',
+                    autonomy: 35,
+                    efficiency: 48
+                }
+            ]
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMetrics();
+            initializeCharts();
+            loadEvaluations();
+            setupPlatformTabs();
+            
+            // Auto refresh svakih 30 sekundi
+            setInterval(refreshData, 30000);
+        });
+
+        // Load metrics sa animacijom
+        function loadMetrics() {
+            const metrics = mockData.metrics;
+            
+            animateValue('totalEvaluations', 0, metrics.totalEvaluations, 1500);
+            animateValue('avgSlavkoScore', 0, metrics.avgSlavkoScore, 1500, '%');
+            animateValue('autonomyLevel', 0, metrics.autonomyLevel, 1500, '%');
+            animateValue('costSavings', 0, metrics.costSavings, 1500, ');
+            animateValue('ethicsCompliance', 0, metrics.ethicsCompliance, 1500, '%');
+            animateValue('productionReady', 0, metrics.productionReady, 1500);
+        }
+
+        // Animate brojeve
+        function animateValue(elementId, start, end, duration, prefix = '') {
+            const element = document.getElementById(elementId);
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                
+                const displayValue = prefix === ' ? 
+                    `${prefix}${Math.floor(current).toLocaleString()}` :
+                    `${Math.floor(current)}${prefix}`;
+                
+                element.textContent = displayValue;
+                element.classList.add('updating');
+                
+                setTimeout(() => element.classList.remove('updating'), 100);
+            }, 16);
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            initPerformanceRadar();
+            initPlatformDistribution();
+            initScoreTrend();
+        }
+
+        // Performance Radar Chart
+        function initPerformanceRadar() {
+            const ctx = document.getElementById('performanceRadar').getContext('2d');
+            
+            performanceChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['SlavkoScore™', 'Autonomija', 'Efikasnost', 'Etika', 'Performanse', 'Troškovi'],
+                    datasets: [{
+                        label: 'Agent Performance',
+                        data: [84, 76, 82, 92, 78, 85],
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(102, 126, 234, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#666',
+                                font: { size: 12 }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            pointLabels: { color: '#333', font: { size: 13, weight: '600' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Platform Distribution Chart
+        function initPlatformDistribution() {
+            const ctx = document.getElementById('platformDistribution').getContext('2d');
+            
+            distributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['OpenAI Agent', 'Gemini Calling', 'Grok Emotional', 'Custom Agents'],
+                    datasets: [{
+                        data: [45, 28, 15, 12],
+                        backgroundColor: ['#00a67e', '#4285f4', '#000000', '#6c757d'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: { weight: '600', size: 12 },
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Score Trend Chart
+        function initScoreTrend() {
+            const ctx = document.getElementById('scoreTrend').getContext('2d');
+            
+            // Generiraj podatke za zadnjih 30 dana
+            const dates = [];
+            const scores = [];
+            const today = new Date();
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('hr-HR', { month: 'short', day: 'numeric' }));
+                
+                // Simulirani trend s rastom
+                const baseScore = 70 + (29 - i) * 0.5 + Math.random() * 10;
+                scores.push(Math.min(100, Math.max(0, baseScore)));
+            }
+            
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'SlavkoScore™',
+                        data: scores,
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Load evaluations
+        function loadEvaluations() {
+            const loadingState = document.getElementById('loadingState');
+            const evaluationsList = document.getElementById('evaluationsList');
+            
+            // Simulacija loading-a
+            setTimeout(() => {
+                loadingState.style.display = 'none';
+                renderEvaluations(mockData.evaluations);
+            }, 1500);
+        }
+
+        // Render evaluations list
+        function renderEvaluations(evaluations) {
+            const evaluationsList = document.getElementById('evaluationsList');
+            
+            if (evaluations.length === 0) {
+                evaluationsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <h3>Nema evaluacija za prikaz</h3>
+                        <p>Počnite s evaluacijom svojih AI agenata.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const filteredEvaluations = currentPlatform === 'all' ? 
+                evaluations : evaluations.filter(e => e.platform === currentPlatform);
+            
+            evaluationsList.innerHTML = filteredEvaluations.map(eval => {
+                const scoreClass = eval.score >= 80 ? 'score-excellent' :
+                                  eval.score >= 60 ? 'score-good' :
+                                  eval.score >= 40 ? 'score-average' : 'score-poor';
+                
+                const platformClass = eval.platform.replace('-', '');
+                const platformName = eval.platform.replace('-', ' ').toUpperCase();
+                
+                return `
+                    <div class="evaluation-item">
+                        <div class="eval-agent">
+                            <div class="agent-icon ${platformClass}">
+                                ${platformName.charAt(0)}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">${eval.name}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">${platformName}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="eval-score ${scoreClass}">
+                            ${eval.score}%
+                        </div>
+                        
+                        <div>
+                            <div style="font-weight: 600;">${eval.autonomy}%</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Autonomija</div>
+                        </div>
+                        
+                        <div>
+                            <div style="font-weight: 600;">${eval.efficiency}%</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Efikasnost</div>
+                        </div>
+                        
+                        <div class="eval-status status-${eval.status}">
+                            ${eval.status}
+                        </div>
+                        
+                        <div class="eval-actions">
+                            <button class="action-btn view-btn" onclick="viewEvaluation(${eval.id})" title="Pogledaj detalje">
+                                👁
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteEvaluation(${eval.id})" title="Obriši">
+                                🗑
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Setup platform tabs
+        function setupPlatformTabs() {
+            document.querySelectorAll('.platform-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    currentPlatform = tab.dataset.platform;
+                    renderEvaluations(mockData.evaluations);
+                    
+                    // Update charts based na platform
+                    updateChartsForPlatform(currentPlatform);
+                });
+            });
+        }
+
+        // Update charts for platform
+        function updateChartsForPlatform(platform) {
+            // Platform-specific data updates
+            console.log(`Updating charts for platform: ${platform}`);
+        }
+
+        // Action functions
+        function viewEvaluation(id) {
+            alert(`Viewing evaluation details for ID: ${id}`);
+            // Implementiraj modal ili redirect na detail page
+        }
+
+        function deleteEvaluation(id) {
+            if (confirm('Jeste li sigurni da želite obrisati ovu evaluaciju?')) {
+                // Implementiraj delete funkcionalnost
+                console.log(`Deleting evaluation ID: ${id}`);
+            }
+        }
+
+        function exportData() {
+            // CSV export funkcionalnost
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Platform,Name,Score,Status,Timestamp\n" +
+                mockData.evaluations.map(e => 
+                    `${e.platform},${e.name},${e.score},${e.status},${e.timestamp}`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "slavkokernel-evaluations.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function refreshData() {
+            // Refresh button animation
+            const refreshBtn = document.querySelector('.refresh-btn');
+            refreshBtn.style.transform = 'scale(1.1) rotate(360deg)';
+            
+            // Simuliraj data refresh
+            setTimeout(() => {
+                loadMetrics();
+                loadEvaluations();
+                refreshBtn.style.transform = 'scale(1) rotate(0deg)';
+            }, 1000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshData();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        exportData();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem !important; /* Manji naslov */
+    }
+    
+    .hero-content {
+        padding: 0 1rem;
+    }
+    
+    .cta-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #hero-3d-container {
+        height: 250px !important; /* Manji 3D prikaz */
+    }
+    
+    .platform-3d-container {
+        height: 120px !important; /* Manji 3D prikaz u pricing sekciji */
+    }
+    
+    .pricing-card {
+        margin-bottom: 2rem; /* Razmak između cijena */
+    }
+    
+    .cta-primary,
+    .cta-secondary {
+        width: 90% !important; /* Širi CTA gumbi */
+        max-width: 300px;
+        justify-content: center;
+        margin: 0.5rem auto !important;
+    }
+}

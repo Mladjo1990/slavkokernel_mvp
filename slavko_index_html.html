@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlavkoKernel™ - Agent Era Evaluator | Najprofesionalnija AI Agent Platforma</title>
+    <meta name="description" content="Revolucionarna platforma za evaluaciju OpenAI Agent, Gemini Calling, Grok Emotional AI. Enterprise rješenje za testiranje autonomnih AI agenata.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="SlavkoKernel™ - Agent Era Evaluator">
+    <meta property="og:description" content="Profesionalna platforma za evaluaciju AI agenata. OpenAI Agent, Gemini, Grok - sve na jednom mjestu.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://formatdisc.hr">
+    
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #ff6b6b;
+            --success-color: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: white;
+            text-align: center;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="grad"><stop offset="0%" stop-color="white" stop-opacity="0.1"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="3" fill="url(%23grad)"/><circle cx="800" cy="300" r="2" fill="url(%23grad)"/><circle cx="400" cy="700" r="4" fill="url(%23grad)"/><circle cx="600" cy="100" r="2" fill="url(%23grad)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .breaking-news {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            display: inline-block;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+        
+        .cta-container {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(45deg, var(--accent-color), #ee5a52);
+            color: white;
+            padding: 1.3rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+        }
+        
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1.3rem 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .trust-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            opacity: 0.9;
+        }
+        
+        .trust-item {
+            text-align: center;
+        }
+        
+        .trust-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trust-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, var(--bg-light) 0%, #ffffff 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .openai-icon {
+            background: linear-gradient(45deg, #00a67e, #00d4aa);
+            color: white;
+        }
+        
+        .gemini-icon {
+            background: linear-gradient(45deg, #4285f4, #34a853);
+            color: white;
+        }
+        
+        .grok-icon {
+            background: linear-gradient(45deg, #000000, #333333);
+            color: white;
+        }
+        
+        .analytics-icon {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+        
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, var(--text-dark) 0%, #34495e 100%);
+            color: white;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--accent-color), #ee5a52);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-currency {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .plan-period {
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-features {
+            margin-bottom: 2.5rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .feature-check {
+            color: var(--success-color);
+            margin-right: 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .plan-button {
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .plan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 6rem 0;
+            background: var(--bg-light);
+        }
+        
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-top: 3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .submit-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content {
+                padding: 0 1rem;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-primary,
+            .cta-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .trust-metrics {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .features-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🔥 SlavkoKernel™</a>
+            <ul class="nav-links">
+                <li><a href="#features">Funkcionalnosti</a></li>
+                <li><a href="#pricing">Cijene</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+            <a href="#pricing" class="nav-cta">Počni Besplatno</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="breaking-news">
+                🚨 BREAKING: OpenAI Agent LIVE | Gemini Calling Aktivan | Meta AI Factory u Izgradnji
+            </div>
+            
+            <h1 class="hero-title">
+                SlavkoKernel™<br>
+                Agent Era Evaluator
+            </h1>
+            
+            <p class="hero-subtitle">
+                Definitivna evaluacijska platforma za autonomne AI agente. Testiraj OpenAI Agent workflows, validiraj Gemini function calling, mjeri Grok emocionalnu inteligenciju i optimiziraj custom agent performanse s enterprise-grade preciznošću.
+            </p>
+            
+            <div class="cta-container">
+                <a href="#contact" class="cta-primary">
+                    🚀 Počni Agent Evaluaciju
+                </a>
+                <a href="#features" class="cta-secondary">
+                    📊 Pogledaj Funkcionalnosti
+                </a>
+            </div>
+            
+            <div class="trust-metrics">
+                <div class="trust-item">
+                    <span class="trust-number">2,500+</span>
+                    <span class="trust-label">Agenata Evaluirano</span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-number">$2.4M</span>
+                    <span class="trust-label">Ušteđeno Troškova</span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-number">94%</span>
+                    <span class="trust-label">Preciznost</span>
+                </div>
+                <div class="trust-item">
+                    <span class="trust-number">Fortune 500</span>
+                    <span class="trust-label">Enterprise Klijenti</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise-Grade Agent Testiranje</h2>
+                <p class="section-subtitle">
+                    Sveobuhvatan evaluacijski framework dizajniran za eru autonomnih AI agenata. Mjeri performanse, osiguraj pouzdanost i optimiziraj troškove preko svih glavnih agent platformi.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon openai-icon">🤖</div>
+                    <h3 class="feature-title">OpenAI Agent Integracija</h3>
+                    <p class="feature-description">
+                        Direktna integracija s OpenAI Agent API-jem za real-time workflow evaluaciju. Prati razine autonomije, preciznost odlučivanja i korištenje resursa kroz kompleksne multi-step zadatke.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon gemini-icon">📞</div>
+                    <h3 class="feature-title">Gemini Function Calling</h3>
+                    <p class="feature-description">
+                        Specijalizirano testiranje za Google Gemini function calling mogućnosti. Validiraj API integracije, mjeri preciznost odgovora i optimiziraj calling patterne za produkcijske deploymente.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon grok-icon">❤️</div>
+                    <h3 class="feature-title">Grok Emocionalna Inteligencija</h3>
+                    <p class="feature-description">
+                        Napredni emocionalni AI evaluacijski framework posebno dizajniran za xAI Grok platformu. Mjeri empatiju, kulturnu osjetljivost i prikladne emocionalne odgovore u konverzacijskim kontekstovima.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon analytics-icon">📊</div>
+                    <h3 class="feature-title">SlavkoScore™ Analytics</h3>
+                    <p class="feature-description">
+                        Vlasnički scoring algoritam koji pruža sveobuhvatne agent performance metrije. Prati autonomiju, efikasnost, ethics compliance i cost optimizaciju kroz cijeli agent portfolio.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Agent Era Pricing</h2>
+                <p class="section-subtitle">
+                    Profesionalni evaluacijski alati s enterprise skalabilnošću i sveobuhvatnom podrškom.
+                </p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="plan-name">Starter</h3>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span>49
+                    </div>
+                    <div class="plan-period">mjesečno</div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            2,000 agent evaluacija
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Osnovni SlavkoScore™ analytics
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            OpenAI Agent testiranje
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Standardni dashboard pristup
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Email podrška
+                        </div>
+                    </div>
+                    <button class="plan-button" onclick="selectPlan('starter')">Počni Besplatno</button>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Najpopularniji</div>
+                    <h3 class="plan-name">Professional</h3>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span>199
+                    </div>
+                    <div class="plan-period">mjesečno</div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            20,000 agent evaluacija
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Potpuni agent monitoring suite
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Gemini calling evaluacija
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Grok emocionalno scoriranje
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Napredni analytics dashboard
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Prioritetna podrška
+                        </div>
+                    </div>
+                    <button class="plan-button" onclick="selectPlan('professional')">Počni Professional</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="plan-name">Enterprise</h3>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span>599
+                    </div>
+                    <div class="plan-period">mjesečno</div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Neograničene evaluacije
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Custom Prometheus scale testiranje
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            UK supercomputer integracija
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            White-label deployment
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Dedicated account manager
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            24/7 telefonska podrška
+                        </div>
+                    </div>
+                    <button class="plan-button" onclick="selectPlan('enterprise')">Kontaktiraj Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-container">
+                <div class="section-header">
+                    <h2 class="section-title">Počni s Agent Era Evaluacijom</h2>
+                    <p class="section-subtitle">
+                        Pridruži se vodećim organizacijama koje koriste SlavkoKernel™ za optimizaciju svojih AI agenata. Besplatni trial uključen!
+                    </p>
+                </div>
+                
+                <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Ime i prezime *</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email adresa *</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="company">Tvrtka/Organizacija</label>
+                        <input type="text" id="company" name="company" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="agents">Koje AI agente koristiš? *</label>
+                        <select id="agents" name="agents" class="form-input" required>
+                            <option value="">Odaberi...</option>
+                            <option value="openai">OpenAI Agent</option>
+                            <option value="gemini">Google Gemini</option>
+                            <option value="grok">xAI Grok</option>
+                            <option value="custom">Custom Agents</option>
+                            <option value="multiple">Više platformi</option>
+                            <option value="planning">Planiram implementaciju</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="message">Poruka (opisuj svoje potrebe)</label>
+                        <textarea id="message" name="message" class="form-input form-textarea" placeholder="Opisuj svoje trenutne AI agent implementacije i što bi htio postići s SlavkoKernel™ evaluacijom..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" id="submitBtn">
+                        🚀 Pokreni Besplatni Trial
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">🔥 SlavkoKernel™</div>
+            <p class="footer-text">
+                Profesionalna AI agent evaluacijska platforma kojoj vjeruju Fortune 500 tvrtke diljem svijeta.
+            </p>
+            
+            <div class="footer-links">
+                <a href="#features">Funkcionalnosti</a>
+                <a href="#pricing">Cijene</a>
+                <a href="#contact">Kontakt</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 SlavkoKernel™. Napravljeno za autonomnu AI budućnost. | formatdisc.hr</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling za anchor linkove
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Plan selection funkcija
+        function selectPlan(planType) {
+            // Pošalji event za analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'select_plan', {
+                    'plan_type': planType,
+                    'value': planType === 'starter' ? 49 : planType === 'professional' ? 199 : 599
+                });
+            }
+            
+            // Scroll do contact forme
+            document.getElementById('contact').scrollIntoView({
+                behavior: 'smooth'
+            });
+            
+            // Popuni formu s planom
+            const messageField = document.getElementById('message');
+            messageField.value = `Zainteresiran/a sam za ${planType.charAt(0).toUpperCase() + planType.slice(1)} plan. Molim kontaktirajte me za više informacija.`;
+            
+            // Focus na ime polje
+            document.getElementById('name').focus();
+        }
+
+        // Form submission
+        function submitForm(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Loading state
+            submitBtn.innerHTML = '<div class="loading"></div> Šalje se...';
+            submitBtn.disabled = true;
+            
+            // Collect form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Simulacija slanja (zamijeniti s pravim API pozivom)
+            setTimeout(() => {
+                // Success state
+                submitBtn.innerHTML = '✅ Uspješno poslano!';
+                submitBtn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+                
+                // Pošalji analytics event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'form_submit', {
+                        'form_type': 'contact',
+                        'user_agent_type': data.agents
+                    });
+                }
+                
+                // Reset nakon 3 sekunde
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = 'linear-gradient(45deg, var(--primary-color), var(--secondary-color))';
+                    submitBtn.disabled = false;
+                    event.target.reset();
+                }, 3000);
+                
+                console.log('Form submitted:', data);
+                
+            }, 2000);
+        }
+
+        // Parallax effect za hero sekciju
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+        });
+
+        // Intersection Observer za animacije
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elementi za animaciju
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.feature-card, .pricing-card');
+            
+            animateElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+
+        // Dynamic typing effect za hero title (optional)
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
+
+        // Mobile menu toggle (za buduće potrebe)
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('mobile-active');
+        }
+
+        // Performance optimization - lazy loading za slike (kada dodamo)
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    </script>
+
+    <!-- Google Analytics (zamijeniti s pravim tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+</html>

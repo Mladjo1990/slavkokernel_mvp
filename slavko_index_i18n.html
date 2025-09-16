@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<!--
+ * SlavkoKernel™ Agent Era Evaluator Platform
+ * Copyright (c) 2025 Formatdisc.hr. All rights reserved.
+ * 
+ * OWNER: Mladen Gertner
+ * COMPANY: Formatdisc.hr
+ * LOCATION: Zagreb, Croatia
+ * CONTACT: slavkokernel@formatdisc.hr / mladen@formatdisc.hr
+ * PHONE: 091 542 1014
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * This software contains trade secrets and proprietary information
+ * belonging to Formatdisc.hr. Unauthorized copying, modification,
+ * distribution, or use is strictly prohibited.
+ * 
+ * SlavkoScore™ is a registered trademark of Formatdisc.hr.
+ * Patent pending for SlavkoScore™ algorithm.
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlavkoKernel™ - Agent Era Evaluator | Most Professional AI Agent Platform</title>
+    <meta name="description" content="Revolutionary platform for evaluating OpenAI Agent, Gemini Calling, Grok Emotional AI. Enterprise solution for testing autonomous AI agents.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="SlavkoKernel™ - Agent Era Evaluator">
+    <meta property="og:description" content="Professional platform for evaluating AI agents. OpenAI Agent, Gemini, Grok - all in one place.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://formatdisc.hr">
+    
+    <!-- Three.js biblioteke za 3D grafiku -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #ff6b6b;
+            --success-color: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-left: 2rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            position: relative;
+            margin-left: 2rem;
+        }
+        
+        .language-current {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-current:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .language-current img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: none;
+            z-index: 1001;
+        }
+        
+        .language-selector:hover .language-dropdown {
+            display: block;
+        }
+        
+        .language-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .language-option:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .language-option.active {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .language-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: white;
+            text-align: center;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="grad"><stop offset="0%" stop-color="white" stop-opacity="0.1"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="3" fill="url(%23grad)"/><circle cx="800" cy="300" r="2" fill="url(%23grad)"/><circle cx="400" cy="700" r="4" fill="url(%23grad)"/><circle cx="600" cy="100" r="2" fill="url(%23grad)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 100px -100px;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .breaking-news {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+        }
+        
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .cta-primary {
+            background: white;
+            color: var(--primary-color);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+        }
+        
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Sections */
+        section {
+            padding: 8rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Features */
+        .features {
+            background: var(--bg-light);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            color: var(--text-light);
+            flex-grow: 1;
+        }
+        
+        /* Platforms */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .platform-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .platform-logo {
+            height: 60px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .platform-logo img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        
+        .platform-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .platform-description {
+            color: var(--text-light);
+            flex-grow: 1;
+        }
+        
+        /* Metrics */
+        .metrics {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
+            color: white;
+        }
+        
+        .metrics .section-title {
+            background: linear-gradient(45deg, #fff, #ddd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .metrics .section-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+        
+        .metric-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-description {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            background: var(--bg-light);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-quote {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .testimonial-quote::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -0.5rem;
+            font-size: 3rem;
+            color: var(--primary-color);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, var(--text-dark) 0%, #34495e 100%);
+            color: white;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--accent-color), #ee5a52);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .plan-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-currency {
+            font-size: 1.5rem;
+            vertical-align: super;
+            margin-right: 0.2rem;
+        }
+        
+        .plan-period {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .plan-features {
+            margin-bottom: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .feature-check {
+            color: var(--success-color);
+            margin-right: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .plan-cta {
+            display: block;
+            background: white;
+            color: var(--text-dark);
+            text-align: center;
+            padding: 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .plan-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 0;
+        }
+        
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            background: white;
+            color: var(--primary-color);
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(102, 126, 234, 0.2);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Poboljšani responsivni stilovi */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem !important; /* Manji naslov */
+            }
+            
+            .hero-content {
+                padding: 0 1rem;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #hero-3d-container {
+                height: 250px !important; /* Manji 3D prikaz */
+            }
+            
+            .platform-3d-container {
+                height: 120px !important; /* Manji 3D prikaz u pricing sekciji */
+            }
+            
+            .pricing-card {
+                margin-bottom: 2rem; /* Razmak između cijena */
+            }
+            
+            .cta-primary,
+            .cta-secondary {
+                width: 90% !important; /* Širi CTA gumbi */
+                max-width: 300px;
+                justify-content: center;
+                margin: 0.5rem auto !important;
+            }
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                🔥 <span>SlavkoKernel™</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features" data-i18n-nav="features">Features</a></li>
+                <li><a href="#platforms" data-i18n-nav="platforms">Platforms</a></li>
+                <li><a href="#pricing" data-i18n-nav="pricing">Pricing</a></li>
+                <li><a href="#contact" data-i18n-nav="contact">Contact</a></li>
+            </ul>
+            
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <div class="language-current">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNDgwIj48ZGVmcz48Y2xpcFBhdGggaWQ9ImEiPjxwYXRoIGZpbGwtb3BhY2l0eT0iLjciIGQ9Ik0wIDBoNjQwdjQ4MEgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNhKSI+PHBhdGggZmlsbD0iIzAxMjE2OSIgZD0iTTAgMGg2NDB2NDgwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTc1IDAgMjQ0IDE4MUw1NjIgMGg3OHY2Mkw0MDAgMjQxbDI0MCAxNzh2NjFoLTgwTDMyMCAzMDEgODEgNDgwSDBWNDIwTDIzNyAyNDEgMCA2MlYwaDc1eiIvPjxwYXRoIGZpbGw9IiNDODEwMkUiIGQ9Im00MjQgMjgxIDIxNiAxNTl2NDBMNDAwIDMwMWwtODEtNTkgMTA1IDM5ek0yNDAgMGgyNDBWNEgxMjBMNDAgMjhsODQgMzJMMjQwIDB6TTAgMTY1djQwbDE2MSAxMjBMMCAxNjV6TTc1IDAgOCAxMjVsMTYzLTQyTDc1IDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTI0MSAwdjQ4MGgxNjBWMEgyNDF6TTAgMTYwdjE2MGg2NDBWMTYwSDB6Ii8+PHBhdGggZmlsbD0iI0M4MTAyRSIgZD0iTTAgMTkzdjk2aDY0MHYtOTZIMHpNMjczIDB2NDgwaDk2VjBoLTk2eiIvPjwvZz48L3N2Zz4=" alt="English">
+                    <span>EN</span>
+                </div>
+                <div class="language-dropdown">
+                    <div class="language-option active" data-lang="en">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNDgwIj48ZGVmcz48Y2xpcFBhdGggaWQ9ImEiPjxwYXRoIGZpbGwtb3BhY2l0eT0iLjciIGQ9Ik0wIDBoNjQwdjQ4MEgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNhKSI+PHBhdGggZmlsbD0iIzAxMjE2OSIgZD0iTTAgMGg2NDB2NDgwSDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTc1IDAgMjQ0IDE4MUw1NjIgMGg3OHY2Mkw0MDAgMjQxbDI0MCAxNzh2NjFoLTgwTDMyMCAzMDEgODEgNDgwSDBWNDIwTDIzNyAyNDEgMCA2MlYwaDc1eiIvPjxwYXRoIGZpbGw9IiNDODEwMkUiIGQ9Im00MjQgMjgxIDIxNiAxNTl2NDBMNDAwIDMwMWwtODEtNTkgMTA1IDM5ek0yNDAgMGgyNDBWNEgxMjBMNDAgMjhsODQgMzJMMjQwIDB6TTAgMTY1djQwbDE2MSAxMjBMMCAxNjV6TTc1IDAgOCAxMjVsMTYzLTQyTDc1IDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTI0MSAwaDE2MHY0ODBIMjQxeiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDE2MGg2NDB2MTYwSDB6Ii8+PHBhdGggZmlsbD0iI0M4MTAyRSIgZD0iTTAgMTkzaDY0MHY5NkgweiIvPjxwYXRoIGZpbGw9IiNDODEwMkUiIGQ9Ik0yNzMgMGg5NnY0ODBoLTk2eiIvPjwvZz48L3N2Zz4=" alt="English">
+                        <span data-i18n="language.en">English</span>
+                    </div>
+                    <div class="language-option" data-lang="hr">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNDgwIj48ZGVmcz48Y2xpcFBhdGggaWQ9ImEiPjxwYXRoIGZpbGwtb3BhY2l0eT0iLjciIGQ9Ik0wIDBoNjQwdjQ4MEgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwaDY0MHY0ODBIMHoiLz48cGF0aCBmaWxsPSIjZDgwMDAwIiBkPSJNMCAwaDY0MHYxNjBIMHoiLz48cGF0aCBmaWxsPSIjMDAyMDY4IiBkPSJNMCAzMjBoNjQwdjE2MEgweiIvPjwvZz48L3N2Zz4=" alt="Hrvatski">
+                        <span data-i18n="language.hr">Hrvatski</span>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#pricing" class="nav-cta" data-i18n-nav="cta">Start Free</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="breaking-news" data-i18n="hero.breaking">
+                🚨 BREAKING: OpenAI Agent LIVE | Gemini Calling Active | Meta AI Factory Under Construction
+            </div>
+            
+            <h1 class="hero-title" data-i18n="hero.title">
+                SlavkoKernel™<br>
+                Agent Era Evaluator
+            </h1>
+            
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+                The definitive evaluation platform for autonomous AI agents. Test OpenAI Agent workflows, validate Gemini function calling, measure Grok emotional intelligence, and optimize custom agent performance with enterprise-grade precision.
+            </p>
+            
+            <!-- 3D Interaktivna Kućica -->
+            <div id="hero-3d-container" style="width: 100%; height: 300px; margin-bottom: 2rem;" loading="lazy"></div>
+            
+            <div class="cta-container">
+                <a href="#contact" class="cta-primary" data-i18n="hero.cta_primary">
+                    🚀 Start Agent Evaluation
+                </a>
+                <a href="#features" class="cta-secondary" data-i18n="hero.cta_secondary">
+                    📊 View Features
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="features.title">Enterprise-Grade Agent Evaluation</h2>
+                <p class="section-subtitle" data-i18n="features.subtitle">
+                    Comprehensive tools for testing, measuring, and optimizing AI agent performance across all major platforms.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3 class="feature-title" data-i18n="features.feature_1.title">Autonomous Agent Testing</h3>
+                    <p class="feature-description" data-i18n="features.feature_1.description">
+                        Validate agent workflows with comprehensive test suites. Measure autonomy, efficiency, and task completion rates.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title" data-i18n="features.feature_2.title">Cross-Platform Benchmarking</h3>
+                    <p class="feature-description" data-i18n="features.feature_2.description">
+                        Compare performance across OpenAI, Gemini, Grok, and custom agents with standardized metrics.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">❤️</div>
+                    <h3 class="feature-title" data-i18n="features.feature_3.title">Emotional Intelligence Scoring</h3>
+                    <p class="feature-description" data-i18n="features.feature_3.description">
+                        Evaluate agent EQ, sentiment analysis, and emotional response appropriateness.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title" data-i18n="features.feature_4.title">Security & Compliance</h3>
+                    <p class="feature-description" data-i18n="features.feature_4.description">
+                        Ensure agents meet enterprise security standards and regulatory requirements.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title" data-i18n="features.feature_5.title">Performance Analytics</h3>
+                    <p class="feature-description" data-i18n="features.feature_5.description">
+                        Detailed dashboards with actionable insights to optimize agent performance.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3 class="feature-title" data-i18n="features.feature_6.title">API Integration</h3>
+                    <p class="feature-description" data-i18n="features.feature_6.description">
+                        Seamlessly integrate with your existing workflows and development pipelines.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platforms Section -->
+    <section id="platforms" class="platforms">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="platforms.title">Supported AI Agent Platforms</h2>
+                <p class="section-subtitle" data-i18n="platforms.subtitle">
+                    Comprehensive evaluation tools for all major AI agent platforms and custom implementations.
+                </p>
+            </div>
+            
+            <div class="platforms-grid">
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">🤖</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_1.title">OpenAI Agent</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_1.description">
+                        Full support for OpenAI's autonomous agent capabilities, function calling, and tool use.
+                    </p>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">🌀</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_2.title">Google Gemini</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_2.description">
+                        Complete evaluation suite for Gemini's multimodal capabilities and function calling.
+                    </p>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">🔥</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_3.title">xAI Grok</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_3.description">
+                        Specialized tools for measuring Grok's emotional intelligence and real-time responses.
+                    </p>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">🌐</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_4.title">Meta AI</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_4.description">
+                        Support for Meta's upcoming agent platform and Llama-based implementations.
+                    </p>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">🧠</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_5.title">Anthropic Claude</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_5.description">
+                        Evaluation tools for Claude's reasoning, tool use, and autonomous capabilities.
+                    </p>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-logo">
+                        <span style="font-size: 2.5rem;">⚙️</span>
+                    </div>
+                    <h3 class="platform-title" data-i18n="platforms.platform_6.title">Custom Agents</h3>
+                    <p class="platform-description" data-i18n="platforms.platform_6.description">
+                        Flexible framework for evaluating your custom agent implementations and workflows.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="metrics">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="metrics.title">SlavkoScore™ Evaluation Metrics</h2>
+                <p class="section-subtitle" data-i18n="metrics.subtitle">
+                    Our proprietary scoring system provides comprehensive agent performance evaluation across critical dimensions.
+                </p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">🤖</div>
+                    <h3 class="metric-title" data-i18n="metrics.metric_1.title">Autonomy Score</h3>
+                    <p class="metric-description" data-i18n="metrics.metric_1.description">
+                        Measures the agent's ability to operate independently without human intervention.
+                    </p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">⚡</div>
+                    <h3 class="metric-title" data-i18n="metrics.metric_2.title">Efficiency Rating</h3>
+                    <p class="metric-description" data-i18n="metrics.metric_2.description">
+                        Evaluates resource usage, response time, and operational costs.
+                    </p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">✅</div>
+                    <h3 class="metric-title" data-i18n="metrics.metric_3.title">Task Completion</h3>
+                    <p class="metric-description" data-i18n="metrics.metric_3.description">
+                        Assesses the agent's ability to successfully complete assigned tasks and objectives.
+                    </p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">❤️</div>
+                    <h3 class="metric-title" data-i18n="metrics.metric_4.title">Emotional Intelligence</h3>
+                    <p class="metric-description" data-i18n="metrics.metric_4.description">
+                        Measures the agent's ability to recognize and respond appropriately to emotional contexts.
+                    </p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">⚖️</div>
+                    <h3 class="metric-title" data-i18n="metrics.metric_5.title">Ethics Compliance</h3>
+                    <p class="metric-description" data-i18n="metrics.metric_5.description">
+                        Evaluates adherence to ethical guidelines, safety measures, and responsible AI principles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="testimonials.title">Trusted by AI Innovators</h2>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote" data-i18n="testimonials.testimonial_1.quote">
+                        SlavkoKernel has transformed how we evaluate and optimize our agent workflows. The insights are invaluable.
+                    </p>
+                    <p class="testimonial-author" data-i18n="testimonials.testimonial_1.author">Maria K., AI Product Manager</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-quote" data-i18n="testimonials.testimonial_2.quote">
+                        The cross-platform benchmarking helped us identify critical performance gaps in our agent implementation.
+                    </p>
+                    <p class="testimonial-author" data-i18n="testimonials.testimonial_2.author">David L., CTO at AgentWorks</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-quote" data-i18n="testimonials.testimonial_3.quote">
+                        The emotional intelligence scoring is a game-changer for customer-facing AI agents. Highly recommended.
+                    </p>
+                    <p class="testimonial-author" data-i18n="testimonials.testimonial_3.author">Sarah J., Customer Experience Director</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="pricing.title">Agent Era Pricing</h2>
+                <p class="section-subtitle" data-i18n="pricing.subtitle">
+                    Professional evaluation tools with enterprise scalability and comprehensive support.
+                </p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="plan-name" data-i18n="pricing.plan_1.name">Starter</h3>
+                    <!-- 3D OpenAI kocka -->
+                    <div class="platform-3d-container" id="openai-cube-container" style="width: 100%; height: 150px; margin-bottom: 1rem;" loading="lazy"></div>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span><span data-i18n="pricing.plan_1.price">49</span>
+                    </div>
+                    <div class="plan-period" data-i18n="pricing.plan_1.period">monthly</div>
+                    <div class="plan-features" data-i18n-features="pricing.plan_1.features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            2,000 agent evaluations
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Basic metrics dashboard
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Email support
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            CSV export
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Single user
+                        </div>
+                    </div>
+                    <a href="#contact" class="plan-cta" data-i18n="pricing.plan_1.cta">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="popular-badge" data-i18n="pricing.plan_2.popular">Most Popular</div>
+                    <h3 class="plan-name" data-i18n="pricing.plan_2.name">Professional</h3>
+                    <!-- 3D Gemini sfera -->
+                    <div class="platform-3d-container" id="gemini-sphere-container" style="width: 100%; height: 150px; margin-bottom: 1rem;" loading="lazy"></div>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span><span data-i18n="pricing.plan_2.price">199</span>
+                    </div>
+                    <div class="plan-period" data-i18n="pricing.plan_2.period">monthly</div>
+                    <div class="plan-features" data-i18n-features="pricing.plan_2.features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            20,000 agent evaluations
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Advanced analytics
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Priority support
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            API access
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            5 team members
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Custom test scenarios
+                        </div>
+                    </div>
+                    <a href="#contact" class="plan-cta" data-i18n="pricing.plan_2.cta">Choose Pro</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="plan-name" data-i18n="pricing.plan_3.name">Enterprise</h3>
+                    <!-- 3D Grok piramida -->
+                    <div class="platform-3d-container" id="grok-pyramid-container" style="width: 100%; height: 150px; margin-bottom: 1rem;" loading="lazy"></div>
+                    <div class="plan-price">
+                        <span class="plan-currency">$</span><span data-i18n="pricing.plan_3.price">599</span>
+                    </div>
+                    <div class="plan-period" data-i18n="pricing.plan_3.period">monthly</div>
+                    <div class="plan-features" data-i18n-features="pricing.plan_3.features">
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Unlimited evaluations
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Dedicated account manager
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Custom integration
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            White-label reports
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            Unlimited team members
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            SLA guarantees
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-check">✓</span>
+                            On-premise option
+                        </div>
+                    </div>
+                    <a href="#contact" class="plan-cta" data-i18n="pricing.plan_3.cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <div class="container">
+            <h2 class="cta-title" data-i18n="cta_section.title">Ready to Evaluate Your AI Agents?</h2>
+            <p class="cta-subtitle" data-i18n="cta_section.subtitle">
+                Join leading companies using SlavkoKernel™ to optimize their autonomous AI agents.
+            </p>
+            <a href="#" class="cta-button" data-i18n="cta_section.cta">Start Free Trial</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 data-i18n="footer.company">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-i18n="footer.about">About</a></li>
+                        <li><a href="#" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="#" data-i18n="footer.blog">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 data-i18n="footer.product">Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features" data-i18n="footer.features">Features</a></li>
+                        <li><a href="#pricing" data-i18n="footer.pricing">Pricing</a></li>
+                        <li><a href="#contact" data-i18n="footer.contact">Contact</a></li>
+                        <li><a href="dashboard.html" data-i18n="footer.dashboard">Dashboard</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p data-i18n="footer.copyright">© 2025 SlavkoKernel™. Made for the autonomous AI future. | formatdisc.hr</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 3D elementi i touchscreen optimizacija -->
+    <script>
+        // Optimizacija za touchscreen uređaje
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.feature-card, .platform-card, .pricing-card').forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('touchstart', () => {
+                    card.style.transform = 'scale(0.98)';
+                });
+                card.addEventListener('touchend', () => {
+                    card.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Hero 3D kućica
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicijalizacija scene za hero sekciju
+            const heroScene = new THREE.Scene();
+            const heroCamera = new THREE.PerspectiveCamera(75, document.getElementById('hero-3d-container').clientWidth / 300, 0.1, 1000);
+            const heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            heroRenderer.setSize(document.getElementById('hero-3d-container').clientWidth, 300);
+            heroRenderer.setClearColor(0x000000, 0); // Transparentna pozadina
+            document.getElementById('hero-3d-container').appendChild(heroRenderer.domElement);
+
+            // Dodaj kućicu
+            const houseGeometry = new THREE.BoxGeometry(1.5, 1, 1.5);
+            const houseMaterial = new THREE.MeshBasicMaterial({ color: 0x667eea }); // Primary color
+            const house = new THREE.Mesh(houseGeometry, houseMaterial);
+            
+            // Dodaj krov
+            const roofGeometry = new THREE.ConeGeometry(1.2, 1, 4);
+            const roofMaterial = new THREE.MeshBasicMaterial({ color: 0x764ba2 }); // Secondary color
+            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+            roof.position.y = 1;
+            roof.rotation.y = Math.PI / 4;
+            
+            // Dodaj prozore
+            const windowGeometry = new THREE.PlaneGeometry(0.3, 0.3);
+            const windowMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            const window1 = new THREE.Mesh(windowGeometry, windowMaterial);
+            window1.position.set(0.76, 0, 0.4);
+            window1.rotation.y = Math.PI / 2;
+            
+            const window2 = new THREE.Mesh(windowGeometry, windowMaterial);
+            window2.position.set(-0.76, 0, 0.4);
+            window2.rotation.y = -Math.PI / 2;
+            
+            const window3 = new THREE.Mesh(windowGeometry, windowMaterial);
+            window3.position.set(0, 0, 0.76);
+            
+            // Dodaj vrata
+            const doorGeometry = new THREE.PlaneGeometry(0.4, 0.7);
+            const doorMaterial = new THREE.MeshBasicMaterial({ color: 0xff6b6b }); // Accent color
+            const door = new THREE.Mesh(doorGeometry, doorMaterial);
+            door.position.set(0, -0.15, 0.76);
+            
+            // Grupiraj sve elemente
+            const houseGroup = new THREE.Group();
+            houseGroup.add(house);
+            houseGroup.add(roof);
+            houseGroup.add(window1);
+            houseGroup.add(window2);
+            houseGroup.add(window3);
+            houseGroup.add(door);
+            heroScene.add(houseGroup);
+            
+            // Kontrole za rotaciju (interaktivnost)
+            const heroControls = new THREE.OrbitControls(heroCamera, heroRenderer.domElement);
+            heroControls.enableZoom = false;
+            heroControls.enablePan = false;
+            heroCamera.position.z = 5;
+            
+            // Animacija
+            function animateHero() {
+                requestAnimationFrame(animateHero);
+                houseGroup.rotation.y += 0.005;
+                heroControls.update();
+                heroRenderer.render(heroScene, heroCamera);
+            }
+            animateHero();
+            
+            // Responsivnost
+            window.addEventListener('resize', () => {
+                heroCamera.aspect = document.getElementById('hero-3d-container').clientWidth / 300;
+                heroCamera.updateProjectionMatrix();
+                heroRenderer.setSize(document.getElementById('hero-3d-container').clientWidth, 300);
+            });
+        });
+        
+        // OpenAI kocka
+        document.addEventListener('DOMContentLoaded', function() {
+            const openaiScene = new THREE.Scene();
+            const openaiCamera = new THREE.PerspectiveCamera(75, document.getElementById('openai-cube-container').clientWidth / 150, 0.1, 1000);
+            const openaiRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            openaiRenderer.setSize(document.getElementById('openai-cube-container').clientWidth, 150);
+            openaiRenderer.setClearColor(0x000000, 0);
+            document.getElementById('openai-cube-container').appendChild(openaiRenderer.domElement);
+            
+            // OpenAI kocka
+            const cubeGeometry = new THREE.BoxGeometry();
+            const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00a67e }); // OpenAI zelena
+            const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            openaiScene.add(cube);
+            
+            // Kontrole
+            const openaiControls = new THREE.OrbitControls(openaiCamera, openaiRenderer.domElement);
+            openaiControls.enableZoom = false;
+            openaiControls.enablePan = false;
+            openaiCamera.position.z = 3;
+            
+            // Animacija
+            function animateOpenAI() {
+                requestAnimationFrame(animateOpenAI);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                openaiControls.update();
+                openaiRenderer.render(openaiScene, openaiCamera);
+            }
+            animateOpenAI();
+            
+            // Responsivnost
+            window.addEventListener('resize', () => {
+                openaiCamera.aspect = document.getElementById('openai-cube-container').clientWidth / 150;
+                openaiCamera.updateProjectionMatrix();
+                openaiRenderer.setSize(document.getElementById('openai-cube-container').clientWidth, 150);
+            });
+        });
+        
+        // Gemini sfera
+        document.addEventListener('DOMContentLoaded', function() {
+            const geminiScene = new THREE.Scene();
+            const geminiCamera = new THREE.PerspectiveCamera(75, document.getElementById('gemini-sphere-container').clientWidth / 150, 0.1, 1000);
+            const geminiRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            geminiRenderer.setSize(document.getElementById('gemini-sphere-container').clientWidth, 150);
+            geminiRenderer.setClearColor(0x000000, 0);
+            document.getElementById('gemini-sphere-container').appendChild(geminiRenderer.domElement);
+            
+            // Gemini sfera
+            const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x8e44ad }); // Gemini ljubičasta
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            geminiScene.add(sphere);
+            
+            // Kontrole
+            const geminiControls = new THREE.OrbitControls(geminiCamera, geminiRenderer.domElement);
+            geminiControls.enableZoom = false;
+            geminiControls.enablePan = false;
+            geminiCamera.position.z = 3;
+            
+            // Animacija
+            function animateGemini() {
+                requestAnimationFrame(animateGemini);
+                sphere.rotation.y += 0.01;
+                geminiControls.update();
+                geminiRenderer.render(geminiScene, geminiCamera);
+            }
+            animateGemini();
+            
+            // Responsivnost
+            window.addEventListener('resize', () => {
+                geminiCamera.aspect = document.getElementById('gemini-sphere-container').clientWidth / 150;
+                geminiCamera.updateProjectionMatrix();
+                geminiRenderer.setSize(document.getElementById('gemini-sphere-container').clientWidth, 150);
+            });
+        });
+        
+        // Grok piramida
+        document.addEventListener('DOMContentLoaded', function() {
+            const grokScene = new THREE.Scene();
+            const grokCamera = new THREE.PerspectiveCamera(75, document.getElementById('grok-pyramid-container').clientWidth / 150, 0.1, 1000);
+            const grokRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            grokRenderer.setSize(document.getElementById('grok-pyramid-container').clientWidth, 150);
+            grokRenderer.setClearColor(0x000000, 0);
+            document.getElementById('grok-pyramid-container').appendChild(grokRenderer.domElement);
+            
+            // Grok piramida
+            const pyramidGeometry = new THREE.ConeGeometry(1, 1.5, 4);
+            const pyramidMaterial = new THREE.MeshBasicMaterial({ color: 0xe74c3c }); // Grok crvena
+            const pyramid = new THREE.Mesh(pyramidGeometry, pyramidMaterial);
+            grokScene.add(pyramid);
+            
+            // Kontrole
+            const grokControls = new THREE.OrbitControls(grokCamera, grokRenderer.domElement);
+            grokControls.enableZoom = false;
+            grokControls.enablePan = false;
+            grokCamera.position.z = 3;
+            
+            // Animacija
+            function animateGrok() {
+                requestAnimationFrame(animateGrok);
+                pyramid.rotation.y += 0.01;
+                grokControls.update();
+                grokRenderer.render(grokScene, grokCamera);
+            }
+            animateGrok();
+            
+            // Responsivnost
+            window.addEventListener('resize', () => {
+                grokCamera.aspect = document.getElementById('grok-pyramid-container').clientWidth / 150;
+                grokCamera.updateProjectionMatrix();
+                grokRenderer.setSize(document.getElementById('grok-pyramid-container').clientWidth, 150);
+            });
+        });
+    </script>
+
+    <!-- Loading Animation -->
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading').classList.add('hidden');
+            }, 500);
+        });
+    </script>
+    
+    <!-- Internationalization (i18n) -->
+    <script src="js/i18n.js"></script>
+
+    <!-- Google Analytics (zamijeniti s pravim tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+</html>

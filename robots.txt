@@ -1,0 +1,8 @@
+# robots.txt for FormatDisc.hr
+# Owner: Mladen Gertner
+# OIB: 18915075854
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.formatdisc.hr/sitemap.xml
